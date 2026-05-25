@@ -1,0 +1,5 @@
+# Files excluded from Vercel deployment
+scripts/
+*.local
+.env.local
+.env.*.local

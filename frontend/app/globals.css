@@ -1,0 +1,75 @@
+@import "tailwindcss";
+
+@theme inline {
+  --font-sans: var(--font-geist);
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-touch-callout: none;
+}
+
+html,
+body {
+  height: 100%;
+  overflow: hidden;
+  background: #000;
+  color: #fff;
+  font-family: var(--font-geist), system-ui, sans-serif;
+}
+
+/* Remove scrollbar globally */
+::-webkit-scrollbar { display: none; }
+* { scrollbar-width: none; }
+
+/* Safe area insets */
+.pt-safe { padding-top: env(safe-area-inset-top, 0px); }
+.pb-safe { padding-bottom: env(safe-area-inset-bottom, 0px); }
+.pl-safe { padding-left: env(safe-area-inset-left, 0px); }
+.pr-safe { padding-right: env(safe-area-inset-right, 0px); }
+
+/* Prevent text selection on touch */
+.select-none { user-select: none; -webkit-user-select: none; }
+
+/* Smooth scrolling for overflow containers */
+.overflow-y-auto, .overflow-x-auto { -webkit-overflow-scrolling: touch; }
+
+/* GPU-composited keyframes — all infinite animations live here, not in Framer Motion */
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+@keyframes orb-pulse {
+  0%, 100% { transform: scale(0.85); }
+  50% { transform: scale(1.1); }
+}
+@keyframes fade-pulse {
+  0%, 100% { opacity: 0.7; }
+  50% { opacity: 1; }
+}
+@keyframes cta-blink {
+  0%, 100% { opacity: 0.55; }
+  50% { opacity: 1; }
+}
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.3; }
+}
+@keyframes shimmer {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(200%); }
+}
+@keyframes ring-pulse {
+  0% { transform: scale(1); opacity: 0.25; }
+  100% { transform: scale(1.9); opacity: 0; }
+}
+@keyframes arrow-bounce {
+  0%, 82%, 100% { transform: translateX(0); }
+  41% { transform: translateX(5px); }
+}
+@keyframes dot-bounce {
+  0%, 100% { transform: translateY(0); opacity: 0.2; }
+  50% { transform: translateY(-8px); opacity: 1; }
+}

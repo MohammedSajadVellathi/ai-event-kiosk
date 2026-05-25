@@ -1,8 +1,6 @@
-# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
-
-# dependencies
-/node_modules
-/.pnp
+# ── Dependencies ─────────────────────────────
+node_modules/
+.pnp
 .pnp.*
 .yarn/*
 !.yarn/patches
@@ -10,32 +8,59 @@
 !.yarn/releases
 !.yarn/versions
 
-# testing
-/coverage
+# ── Next.js build ────────────────────────────
+frontend/.next/
+frontend/out/
+frontend/build/
 
-# next.js
-/.next/
-/out/
+# ── Python / Backend ─────────────────────────
+backend/.venv/
+backend/venv/
+backend/__pycache__/
+backend/**/__pycache__/
+**/*.pyc
+**/*.pyo
+*.egg-info/
+.eggs/
 
-# production
-/build
+# ── Environment ──────────────────────────────
+.env
+.env.*
+!.env.example
+frontend/.env.local
+frontend/.env.*.local
 
-# misc
+# ── Vercel ───────────────────────────────────
+.vercel
+
+# ── OS / Editor ──────────────────────────────
 .DS_Store
+.DS_Store?
+Thumbs.db
 *.pem
+.vscode/
+.idea/
 
-# debug
+# ── Logs ─────────────────────────────────────
+*.log
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 .pnpm-debug.log*
 
-# env files (can opt-in for committing if needed)
-.env*
-
-# vercel
-.vercel
-
-# typescript
+# ── TypeScript ───────────────────────────────
 *.tsbuildinfo
-next-env.d.ts
+frontend/next-env.d.ts
+
+# ── Test coverage ────────────────────────────
+coverage/
+
+# ── Generated demo images (re-run npm run demo:gen-images) ──
+# frontend/public/demo/*.jpg
+# (commented out — commit these for Vercel deployment)
+
+# ── Generated AI outputs (runtime artifacts, never commit) ──
+backend/outputs/
+
+# ── Root-level Next.js build dir (legacy, from initial scaffold) ──
+.next/
