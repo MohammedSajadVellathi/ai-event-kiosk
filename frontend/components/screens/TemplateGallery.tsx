@@ -1,9 +1,10 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { useSessionStore } from "@/store/useSessionStore";
-import { TEMPLATES } from "@/constants/templates";
+import { TEMPLATES as STATIC_TEMPLATES } from "@/constants/templates";
+import { fetchTemplates } from "@/services/api";
 import { LABELS } from "@/types";
 import { BackButton } from "@/components/ui/BackButton";
 import type { Template } from "@/types";
@@ -12,11 +13,26 @@ export function TemplateGallery() {
   const { language, selectedTemplate, setTemplate, goTo } = useSessionStore();
   const t = LABELS[language];
 
+  const [templates, setTemplates] = useState<Template[]>(STATIC_TEMPLATES);
   const [localSelected, setLocalSelected] = useState<string | null>(
     selectedTemplate?.id ?? null
   );
 
-  const chosen = TEMPLATES.find((tp) => tp.id === localSelected) ?? null;
+  // Fetch live template data from backend — gets correct imageUrl regardless of build env
+  useEffect(() => {
+    fetchTemplates()
+      .then((apiTemplates) => {
+        // Merge API imageUrl with static visual data (colors, accentColor)
+        const merged = apiTemplates.map((apiT) => {
+          const staticT = STATIC_TEMPLATES.find((s) => s.id === apiT.id);
+          return { ...staticT, ...apiT } as Template;
+        });
+        setTemplates(merged);
+      })
+      .catch(() => {}); // keep static fallback on error
+  }, []);
+
+  const chosen = templates.find((tp) => tp.id === localSelected) ?? null;
 
   return (
     <div className="relative w-full h-full bg-black flex flex-col">
@@ -30,9 +46,9 @@ export function TemplateGallery() {
         <div className="w-14" />
       </div>
 
-      {/* 2×2 grid — fills remaining space */}
+      {/* 2×2 grid */}
       <div className="flex-1 px-5 pb-4 grid grid-cols-2 gap-4 min-h-0">
-        {TEMPLATES.map((template, i) => (
+        {templates.map((template, i) => (
           <motion.button
             key={template.id}
             onClick={() => setLocalSelected(template.id)}
@@ -97,7 +113,7 @@ function TemplateCardContent({
         />
       )}
 
-      {/* Dark overlay so label is readable */}
+      {/* Dark overlay */}
       <div className="absolute inset-0 bg-black/30" />
 
       {/* Accent top line */}
@@ -113,14 +129,12 @@ function TemplateCardContent({
         </p>
       </div>
 
-      {/* Premium badge */}
       {template.premium && (
         <div className="absolute top-3 right-3 bg-yellow-400/90 text-black text-[10px] font-bold tracking-widest uppercase px-2 py-0.5 rounded-full">
           PRO
         </div>
       )}
 
-      {/* Selected check */}
       {selected && (
         <motion.div
           initial={{ scale: 0 }}
@@ -128,13 +142,7 @@ function TemplateCardContent({
           className="absolute top-3 left-3 w-7 h-7 rounded-full bg-yellow-400 flex items-center justify-center"
         >
           <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-            <path
-              d="M2.5 7L5.5 10L11.5 4"
-              stroke="black"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
+            <path d="M2.5 7L5.5 10L11.5 4" stroke="black" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
           </svg>
         </motion.div>
       )}
