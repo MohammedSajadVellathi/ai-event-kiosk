@@ -1,4 +1,6 @@
+import base64
 import json
+import os
 import uuid
 import logging
 
@@ -100,7 +102,13 @@ async def generate(
         logger.error(f"ComfyUI connection error: {e}")
         raise HTTPException(status_code=502, detail="Could not reach ComfyUI server")
 
-    # Save to disk and return a static URL — avoids sending 3MB base64 in JSON
+    # Cloud (Render): no persistent disk — return base64 directly
+    # Local: save to disk and return a static URL (keeps browser memory light)
+    if os.getenv("RENDER"):
+        b64 = base64.b64encode(image_bytes_out).decode()
+        logger.info("Cloud mode: returning base64 image")
+        return GenerateResponse(success=True, imageUrl=f"data:image/png;base64,{b64}")
+
     output_filename = f"{uuid.uuid4().hex}.png"
     output_path = settings.outputs_dir / output_filename
     output_path.write_bytes(image_bytes_out)

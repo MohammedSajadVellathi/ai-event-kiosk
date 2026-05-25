@@ -1,0 +1,12 @@
+services:
+  - type: web
+    name: ai-event-kiosk-api
+    runtime: python
+    rootDir: backend
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn app.main:app --host 0.0.0.0 --port $PORT
+    envVars:
+      - key: COMFYUI_URL
+        sync: false   # Set this manually in Render dashboard — your RunPod URL
+      - key: API_BASE_URL
+        value: https://ai-event-kiosk-api.onrender.com
