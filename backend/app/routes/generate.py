@@ -1,6 +1,7 @@
 import base64
 import json
 import os
+import random
 import uuid
 import logging
 
@@ -70,11 +71,12 @@ async def generate(
             template_name = await upload_image(client, template_bytes, template.image_file)
             logger.info(f"Template image uploaded as: {template_name}")
 
-            # 3. Inject the 3 dynamic values into the workflow
-            #    Node 2 = selfie | Node 6 = pose reference | Node 9 = positive prompt
+            # 3. Inject the 4 dynamic values into the workflow
+            #    Node 2 = selfie | Node 6 = pose reference | Node 9 = positive prompt | Node 14 = seed
             workflow["2"]["inputs"]["image"] = selfie_name
             workflow["6"]["inputs"]["image"] = template_name
             workflow["9"]["inputs"]["text"] = template.prompt
+            workflow["14"]["inputs"]["seed"] = random.randint(0, 2**32 - 1)
 
             # 4. Queue the workflow
             logger.info(f"Queueing workflow for template='{template_id}'...")

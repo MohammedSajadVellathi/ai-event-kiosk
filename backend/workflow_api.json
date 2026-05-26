@@ -109,7 +109,7 @@
   },
   "11": {
     "inputs": {
-      "weight": 0.8,
+      "weight": 1.0,
       "start_at": 0,
       "end_at": 1,
       "instantid": [
@@ -209,14 +209,15 @@
   },
   "16": {
     "inputs": {
+      "filename_prefix": "kiosk_output",
       "images": [
         "15",
         0
       ]
     },
-    "class_type": "PreviewImage",
+    "class_type": "SaveImage",
     "_meta": {
-      "title": "Preview Image"
+      "title": "Save Image"
     }
   },
   "17": {
